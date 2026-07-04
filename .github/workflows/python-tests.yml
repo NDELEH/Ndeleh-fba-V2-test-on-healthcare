@@ -1,1 +1,30 @@
+name: Ndeleh-FBA V2 Healthcare Engine CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code Repository (Node 24 Native)
+      uses: actions/checkout@v5
+
+    - name: Set Up Python Environment (Node 24 Native)
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+
+    - name: Install Runtime Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install numpy
+
+    - name: Execute Ndeleh-FBA V2 Clinical Suite
+      run: |
+        python test_clinical_failsafe.py
 
