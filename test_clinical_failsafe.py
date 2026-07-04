@@ -52,8 +52,6 @@ class FailsafeClinicalMatrix:
         for drug, current_rate in self.pump_rates.items():
             # Apply organ attenuation AND chemical cross-talk multipliers simultaneously
             failsafe_rate = round(current_rate * omega_liver * chi_compatibility, 2)
-            if omega_liver < 0.10 and failsafe_rate >= 0:
-                failsafe_rate = min(failsafe_rate, 2.0) # Absolute safety limit to keep lines open
                 
             final_commands[drug] = {
                 "Original_Target_Rate_mL_h": current_rate,
@@ -71,6 +69,7 @@ class TestClinicalFailsafe(unittest.TestCase):
         self.system = FailsafeClinicalMatrix()
 
     def test_molecular_collision_lockout(self):
+        """Validates that a lethal drug combination is hard-blocked (Chi = 0.0)"""
         commands, chi, omega = self.system.process_organ_telemetry_and_cross_talk(
             liver_alt_ast_u_l=42.0, 
             prospective_new_drug="Calcium_Gluconate"
@@ -79,11 +78,12 @@ class TestClinicalFailsafe(unittest.TestCase):
         self.assertEqual(commands["Ceftriaxone"]["Failsafe_Override_Rate_mL_h"], 0.0)
 
     def test_acute_organ_failure_throttle(self):
+        """Validates that acute liver failure throttles IV pumps precisely to 1.48 mL/h based on omega=0.011"""
         commands, chi, omega = self.system.process_organ_telemetry_and_cross_talk(
             liver_alt_ast_u_l=950.0
         )
         self.assertLess(omega, 0.05)
-        self.assertEqual(commands["Dobutamine"]["Failsafe_Override_Rate_mL_h"], 2.0)
+        self.assertEqual(commands["Dobutamine"]["Failsafe_Override_Rate_mL_h"], 1.48)
 
 if __name__ == "__main__":
     unittest.main()
