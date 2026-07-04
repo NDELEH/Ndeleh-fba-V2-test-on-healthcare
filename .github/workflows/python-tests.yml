@@ -27,4 +27,3 @@ jobs:
     - name: Execute Ndeleh-FBA V2 Clinical Suite
       run: |
         python test_clinical_failsafe.py
-
