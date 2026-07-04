@@ -21,7 +21,7 @@ This validation test handles two simultaneous, life-threatening ICU stress event
 
 1. **The Pharmacogenetic & Organ Failure Brake (\(\Omega_{\text{organ}}\))**: 
    The patient carries a known CYP2D6 genetic mutation, flagging them as an *Ultra-Rapid Metabolizer* of the cardiac stimulant Dobutamine. The V2 engine initially commands a massive dose to keep up with their fast metabolism. 
-   However, mid-infusion, a sudden catastrophic event causes acute liver shock (ALT/AST enzymes spike to 950 U/L). The V2 engine instantly computes your sigmoidal decay modifier (Ω), bypasses the standard genetic dosage instruction, and throttles the physical pump down to a safe emergency micro-dose (2.0 mL/h) to protect the failing organ from fatal drug toxicity.
+   However, mid-infusion, a sudden catastrophic event causes acute liver shock (ALT/AST enzymes spike to 950 U/L). The V2 engine instantly computes your sigmoidal decay modifier (Ω = 0.0110), bypasses the standard genetic dosage instruction, and dynamically scales the physical pump down to a protective baseline of **1.48 mL/h** to protect the failing organ from fatal drug toxicity.
 
 2. **The Molecular Cross-Talk Collision Interceptor (\(\chi_{\text{cross-talk}}\))**:
    A physician accidentally orders an intravenous injection of `Calcium Gluconate` while the patient is actively receiving `Ceftriaxone`. In the physical world, mixing these two specific compounds inside an IV line creates rapid, life-threatening micro-crystalline precipitation that shreds the lungs and kidneys. 
@@ -73,12 +73,12 @@ Evaluating Structural Organ Integrity & Chemical Cross-Talk via Ndeleh-FBA V2...
 {
     "Ceftriaxone": {
         "Original_Target_Rate_mL_h": 24.5,
-        "Failsafe_Override_Rate_mL_h": 2.0,
+        "Failsafe_Override_Rate_mL_h": 0.27,
         "Status": "EMERGENCY_THROTTLE_ACTIVE: LIVER FAILURE PROTECTIVE BRAKE"
     },
     "Dobutamine": {
         "Original_Target_Rate_mL_h": 134.42,
-        "Failsafe_Override_Rate_mL_h": 2.0,
+        "Failsafe_Override_Rate_mL_h": 1.48,
         "Status": "EMERGENCY_THROTTLE_ACTIVE: LIVER FAILURE PROTECTIVE BRAKE"
     }
 }
